@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="theme-color" content="#ce1126">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="تموينات الثقة">
+    <meta name="description" content="تموينات الثقة للمواد الغذائية - ذمار">
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="Trust Provisions.png">
+    
+    <title>تموينات الثقة للمواد الغذائية 🇾🇪 | ذمار</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ==================== نافذة تسجيل المالك (مخفية) ==================== -->
+<div class="modal-overlay" id="adminLoginModal">
+    <div class="modal-dialog">
+        <div style="text-align: center; margin-bottom: 16px;">
+            <i class="fas fa-user-shield" style="font-size: 3rem; color: var(--gold);"></i>
+        </div>
+        <h3>🔐 دخول المالك</h3>
+        <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px; font-size: 0.85rem;">
+            هذه المنطقة مخصصة لمالك تموينات الثقة فقط<br>
+            <small style="color: var(--gold);">الرمز الخاص يعطيه المصمم للمالك</small>
+        </p>
+        <div class="form-group">
+            <label><i class="fas fa-key"></i> الرمز الخاص من المصمم</label>
+            <input type="password" id="adminDesignerCode" placeholder="أدخل الرمز الخاص">
+        </div>
+        <div class="form-group">
+            <label><i class="fas fa-user"></i> اسم المالك كامل</label>
+            <input type="text" id="adminFullName" placeholder="الاسم الكامل للمالك">
+        </div>
+        <div class="form-group">
+            <label><i class="fas fa-phone"></i> رقم المالك</label>
+            <input type="tel" id="adminPhone" placeholder="مثال: 775647152">
+        </div>
+        <div class="form-group">
+            <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+            <input type="email" id="adminEmail" placeholder="example@email.com">
+        </div>
+        <button class="btn" id="adminLoginSubmit">
+            <i class="fas fa-sign-in-alt"></i> دخول المالك
+        </button>
+        <button class="btn btn-danger" id="adminLoginCancel">
+            <i class="fas fa-times"></i> إلغاء
+        </button>
+        <div class="modal-error" id="adminLoginError">
+            <i class="fas fa-exclamation-triangle"></i> <span id="adminLoginErrorMsg">بيانات غير صحيحة</span>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== نافذة تسجيل مستخدم ==================== -->
+<div class="modal-overlay" id="userRegisterModal">
+    <div class="modal-dialog">
+        <div style="text-align: center; margin-bottom: 16px;">
+            <i class="fas fa-user-plus" style="font-size: 3rem; color: var(--accent);"></i>
+        </div>
+        <h3>📝 تسجيل حساب جديد</h3>
+        <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px; font-size: 0.85rem;">
+            سجل حسابك للاستفادة من خدمات تموينات الثقة
+        </p>
+        <div class="form-group">
+            <label><i class="fas fa-user"></i> اسم المستخدم</label>
+            <input type="text" id="regUserName" placeholder="أدخل اسمك الكامل">
+        </div>
+        <div class="form-group">
+            <label><i class="fas fa-phone"></i> رقم الهاتف</label>
+            <input type="tel" id="regUserPhone" placeholder="مثال: 77xxxxxxx">
+        </div>
+        <div class="form-group">
+            <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+            <input type="email" id="regUserEmail" placeholder="example@email.com">
+        </div>
+        <button class="btn btn-success" id="userRegisterSubmit">
+            <i class="fas fa-check"></i> إنشاء الحساب
+        </button>
+        <button class="btn btn-danger" id="userRegisterCancel">
+            <i class="fas fa-times"></i> إلغاء
+        </button>
+        <div class="modal-error" id="userRegisterError">
+            <i class="fas fa-exclamation-triangle"></i> <span id="userRegisterErrorMsg">يرجى تعبئة جميع الحقول</span>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== نافذة دخول مستخدم ==================== -->
+<div class="modal-overlay" id="userLoginModal">
+    <div class="modal-dialog">
+        <div style="text-align: center; margin-bottom: 16px;">
+            <i class="fas fa-sign-in-alt" style="font-size: 3rem; color: var(--accent);"></i>
+        </div>
+        <h3>👤 تسجيل دخول</h3>
+        <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px; font-size: 0.85rem;">
+            أدخل بيانات حسابك للدخول
+        </p>
+        <div class="form-group">
+            <label><i class="fas fa-phone"></i> رقم الهاتف</label>
+            <input type="tel" id="loginUserPhone" placeholder="رقم الهاتف المسجل">
+        </div>
+        <div class="form-group">
+            <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+            <input type="email" id="loginUserEmail" placeholder="البريد الإلكتروني المسجل">
+        </div>
+        <button class="btn" id="userLoginSubmit">
+            <i class="fas fa-sign-in-alt"></i> دخول
+        </button>
+        <button class="btn btn-danger" id="userLoginCancel">
+            <i class="fas fa-times"></i> إلغاء
+        </button>
+        <div class="modal-link">
+            ليس لديك حساب؟ <span onclick="showUserRegister()">سجل الآن</span>
+        </div>
+        <div class="modal-error" id="userLoginError">
+            <i class="fas fa-exclamation-triangle"></i> <span id="userLoginErrorMsg">لم يتم العثور على حساب</span>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== PWA ==================== -->
+<div class="pwa-install-banner" id="pwaInstallBanner">
+    <p><i class="fas fa-mobile-alt"></i> <strong>ثبّت تطبيق تموينات الثقة</strong></p>
+    <p style="font-size:0.85rem;">لتجربة أسرع وأفضل - بدون إنترنت! 🇾🇪</p>
+    <button class="btn-small btn" id="pwaInstallBtn" style="margin:8px;"><i class="fas fa-download"></i> تثبيت</button>
+    <button class="btn-small btn-danger" id="pwaDismissBtn" style="margin:8px;">لاحقاً</button>
+</div>
+
+<!-- ==================== شريط علوي ==================== -->
+<div class="app-header">
+    <div class="header-logo-title">
+        <img src="Trust Provisions.png" alt="شعار تموينات الثقة" class="header-logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ccircle cx=%2750%27 cy=%2750%27 r=%2745%27 fill=%27%23ce1126%27/%3E%3Ctext x=%2750%27 y=%2770%27 font-size=%2750%27 text-anchor=%27middle%27 fill=%27white%27%3E%D8%AB%3C/text%3E%3C/svg%3E'">
+        <h2>تموينات الثقة للمواد الغذائية 🇾🇪</h2>
+    </div>
+    <div class="header-actions">
+        <button class="header-icon-btn" id="mosqueBtn" title="المسجد">
+            <img src="Mosque.png" alt="المسجد" onerror="this.style.display='none';">
+        </button>
+        <button class="header-icon-btn" id="themeToggle" title="الوضع الليلي/النهاري">
+            <img src="Lily.png" alt="الوضع الليلي" id="themeIcon" onerror="this.style.display='none';">
+        </button>
+        <button class="header-icon-btn" id="dbStatusIconBtn" title="قاعدة البيانات">
+            <img src="databases.png" alt="قاعدة البيانات" onerror="this.style.display='none';">
+        </button>
+    </div>
+    <div class="yemen-flag-strip"><span></span><span></span><span></span></div>
+</div>
+
+<!-- ==================== حاوية الصفحات ==================== -->
+<div class="page-container">
+    
+    <!-- 1️⃣ الرئيسية -->
+    <div id="homePage" class="page active">
+        <div class="filter-bar">
+            <select id="categoryFilter">
+                <option value="all">كل الأصناف</option>
+                <option value="بقوليات">بقوليات وحبوب</option>
+                <option value="حلويات">حلويات</option>
+                <option value="غازية">مشروبات غازية</option>
+                <option value="عصيرات">عصيرات</option>
+                <option value="مياه">مياه معدنية</option>
+                <option value="بهارات">بهارات</option>
+                <option value="ألبان">ألبان وحليب</option>
+                <option value="زيوت">سمن وزيوت</option>
+                <option value="يمني">منتجات يمنية 🇾🇪</option>
+            </select>
+            <button class="btn-small btn" id="refreshProductsBtn"><i class="fas fa-sync-alt"></i> تحديث</button>
+        </div>
+        
+        <div class="section-title"><i class="fas fa-shopping-basket"></i> المنتجات المتوفرة <span class="yemeni-badge">🇾🇪</span></div>
+        <div id="productsContainer" class="product-grid">
+            <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted);">
+                <i class="fas fa-spinner fa-pulse" style="font-size:2rem;margin-bottom:16px;"></i>
+                <p>جاري تحميل المنتجات...</p>
+            </div>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card"><i class="fas fa-box"></i><div class="stat-number" id="totalProducts">0</div><small>منتج</small></div>
+            <div class="stat-card"><i class="fas fa-tags"></i><div class="stat-number" id="totalCategories">0</div><small>صنف</small></div>
+            <div class="stat-card"><i class="fas fa-shopping-cart"></i><div class="stat-number" id="cartCount">0</div><small>بالسلة</small></div>
+        </div>
+
+        <!-- 🎨 قسم المصمم -->
+        <div class="designer-section">
+            <div class="designer-card-main">
+                <div class="designer-glow-effect"></div>
+                <div class="designer-inner-content">
+                    <div class="designer-icon-wrapper">
+                        <div class="designer-icon-circle">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="designer-badge-tag">مصمم التطبيق</div>
+                    </div>
+                    <div class="designer-info-block">
+                        <h3 class="designer-full-name">عبد الوهاب عبد الواحد الريمي</h3>
+                        <p class="designer-job-title">مطور ومصمم واجهات المستخدم - مطور بايثون</p>
+                        <div class="designer-separator">
+                            <span></span>
+                            <i class="fas fa-star"></i>
+                            <span></span>
+                        </div>
+                    </div>
+                    <a href="https://abdul-s-page.vercel.app/" target="_blank" rel="noopener" class="designer-contact-link">
+                        <span class="btn-icon-circle">
+                            <i class="fas fa-external-link-alt"></i>
+                        </span>
+                        <span class="btn-text-label">التواصل مع المصمم</span>
+                        <span class="btn-arrow-icon">
+                            <i class="fas fa-arrow-left"></i>
+                        </span>
+                    </a>
+                </div>
+                <div class="designer-particles-container">
+                    <span class="floating-particle"></span>
+                    <span class="floating-particle"></span>
+                    <span class="floating-particle"></span>
+                    <span class="floating-particle"></span>
+                    <span class="floating-particle"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="home-footer-section">
+            <div class="delivery-banner">
+                <i class="fas fa-truck"></i>
+                <h3>🚫 لا توجد خدمة توصيل حالياً</h3>
+                <p>نعتذر من عملائنا الكرام... خدمة التوصيل غير متوفرة في الوقت الحالي</p>
+                <div class="coming-soon-badge">
+                    <i class="fas fa-clock"></i> قريباً جداً... خدمة توصيل لجميع العملاء
+                </div>
+            </div>
+            <div class="pickup-note">
+                <i class="fas fa-hand-holding-heart"></i>
+                <div>
+                    <strong>يمكنكم زيارة المحل للشراء المباشر</strong><br>
+                    <small>ذمار - خط الحسينية - بجانب العالمة للخرسانة الجاهزة</small>
+                </div>
+            </div>
+            <div class="thanks-message">
+                <i class="fas fa-heart"></i>
+                <h3>أهلاً وسهلاً بكم في ذمار</h3>
+                <p>نتشرف بخدمتكم في تموينات الثقة للمواد الغذائية</p>
+                <p style="margin-top:12px;">⭐⭐⭐⭐⭐</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2️⃣ المنتجات -->
+    <div id="productsPage" class="page">
+        <div class="section-title"><i class="fas fa-boxes"></i> جميع المنتجات</div>
+        <div class="category-section">
+            <h4 style="margin:16px 0 12px;color:var(--text-secondary);"><i class="fas fa-seedling"></i> البقوليات والحبوب</h4>
+            <div class="product-scroll" id="legumesGrainsContainer"></div>
+            <h4 style="margin:16px 0 12px;color:var(--text-secondary);"><i class="fas fa-candy-cane"></i> الحلويات</h4>
+            <div class="product-scroll" id="sweetsContainer"></div>
+        </div>
+        <div class="category-section">
+            <h4 style="margin:16px 0 12px;color:var(--text-secondary);"><i class="fas fa-wine-bottle"></i> المشروبات الغازية</h4>
+            <div class="product-scroll" id="softDrinksContainer"></div>
+            <h4 style="margin:16px 0 12px;color:var(--text-secondary);"><i class="fas fa-blender"></i> العصيرات</h4>
+            <div class="product-scroll" id="juicesContainer"></div>
+            <h4 style="margin:16px 0 12px;color:var(--text-secondary);"><i class="fas fa-water"></i> المياه المعدنية</h4>
+            <div class="product-scroll" id="waterContainer"></div>
+        </div>
+        <div class="category-section">
+            <h4 style="margin:16px 0 12px;color:var(--text-secondary);"><i class="fas fa-mug-hot"></i> الألبان والحليب</h4>
+            <div class="product-scroll" id="dairyContainer"></div>
+        </div>
+        <div class="category-section">
+            <h4 style="margin:16px 0 12px;color:var(--text-secondary);"><i class="fas fa-oil-can"></i> السمن والزيوت</h4>
+            <div class="product-scroll" id="oilsContainer"></div>
+        </div>
+        <div class="category-section">
+            <h4 style="margin:16px 0 12px;color:var(--text-secondary);"><i class="fas fa-mortar-pestle"></i> البهارات</h4>
+            <div class="product-scroll" id="spicesContainer"></div>
+        </div>
+        <div class="category-section">
+            <h4 style="margin:16px 0 12px;color:var(--text-secondary);"><i class="fas fa-flag"></i> المنتجات اليمنية 🇾🇪</h4>
+            <div class="product-scroll" id="yemeniContainer"></div>
+        </div>
+    </div>
+
+    <!-- 3️⃣ العروض -->
+    <div id="offersPage" class="page">
+        <div class="section-title"><i class="fas fa-tags"></i> عروض اليوم - ذمار</div>
+        <div class="pickup-note"><i class="fas fa-store"></i><div><strong>العروض متاحة للشراء من المحل فقط</strong><br><small>ذمار - خط الحسينية</small></div></div>
+        <div id="activeOffersContainer"></div>
+    </div>
+
+    <!-- 4️⃣ السلة -->
+    <div id="cartPage" class="page">
+        <div class="section-title">
+            <img src="Basket.png" alt="السلة" style="width: 28px; height: 28px; object-fit: contain; vertical-align: middle;" onerror="this.outerHTML='<i class=\'fas fa-shopping-cart\'></i>'">
+            سلة المشتريات
+        </div>
+        <div class="delivery-banner" style="background:linear-gradient(135deg,var(--info),#2980b9);">
+            <i class="fas fa-info-circle"></i><h3 style="color:white;">السلة للمراجعة فقط</h3><p style="color:white;">يرجى زيارة المحل لإتمام عملية الشراء</p>
+        </div>
+        <div id="cartContainer"><div style="text-align:center;padding:40px;color:var(--text-muted);"><i class="fas fa-shopping-basket" style="font-size:3rem;margin-bottom:16px;opacity:0.5;"></i><p>السلة فاضية</p></div></div>
+        <div class="total-bar" id="cartTotal"><span>الإجمالي </span><span>0 ر.ي</span></div>
+        <button class="btn" id="checkoutBtn"><i class="fas fa-store"></i> الطلب متاح في المحل فقط</button>
+        <button class="btn btn-danger" id="clearCartBtn"><i class="fas fa-trash"></i> إفراغ السلة</button>
+    </div>
+
+    <!-- 5️⃣ حسابي -->
+    <div id="profilePage" class="page">
+        <div class="section-title"><i class="fas fa-user"></i> حسابي</div>
+        
+        <div id="currentUserCard"></div>
+        
+        <div id="userAuthButtons" style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+            <button class="btn btn-success" id="showRegisterBtn"><i class="fas fa-user-plus"></i> تسجيل حساب جديد</button>
+            <button class="btn" id="showLoginBtn"><i class="fas fa-sign-in-alt"></i> تسجيل دخول</button>
+        </div>
+        <div id="userLogoutBtn" style="display:none;">
+            <button class="btn btn-danger" id="logoutUserBtn"><i class="fas fa-sign-out-alt"></i> تسجيل خروج</button>
+        </div>
+        
+        <div class="profile-tabs" id="profileTabs">
+            <div class="profile-tab active" data-section="infoSection"><i class="fas fa-info-circle"></i> معلومات المحل</div>
+            <div class="profile-tab" data-section="userSection"><i class="fas fa-id-card"></i> بياناتي</div>
+            <div class="profile-tab admin-tab" data-section="adminSection" id="adminTab" style="display:none;"><i class="fas fa-crown"></i> إدارة المالك</div>
+        </div>
+        
+        <div class="profile-section active" id="infoSection">
+            <div class="profile-card">
+                <div style="font-size:4rem;color:var(--accent);margin-bottom:16px;"><i class="fas fa-store-alt"></i></div>
+                <h3>تموينات الثقة للمواد الغذائية</h3>
+                <p><i class="fas fa-map-pin"></i> ذمار - خط الحسينية</p>
+                <p><i class="fas fa-phone"></i> <span class="contact-phone">775647152</span></p>
+            </div>
+        </div>
+        
+        <div class="profile-section" id="userSection">
+            <div id="userDataDisplay">
+                <div style="text-align:center;padding:40px;color:var(--text-muted);">
+                    <i class="fas fa-user" style="font-size:3rem;margin-bottom:16px;opacity:0.5;"></i>
+                    <p>يرجى تسجيل الدخول لعرض بياناتك</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="profile-section" id="adminSection">
+            <div class="admin-panel">
+                <h3 style="margin-bottom:24px;display:flex;align-items:center;gap:10px;"><i class="fas fa-crown"></i> لوحة تحكم المالك</h3>
+                
+                <div class="profile-tabs" style="margin-bottom:20px;">
+                    <div class="profile-tab active" data-admin="productsManage"><i class="fas fa-boxes"></i> المنتجات</div>
+                    <div class="profile-tab" data-admin="offersManage"><i class="fas fa-tags"></i> العروض</div>
+                    <div class="profile-tab" data-admin="usersManage"><i class="fas fa-users"></i> المستخدمين</div>
+                    <div class="profile-tab" data-admin="exportData"><i class="fas fa-download"></i> تصدير</div>
+                </div>
+                
+                <div class="admin-subsection active" id="productsManage">
+                    <div class="form-group"><input type="text" id="productName" placeholder="اسم المنتج"></div>
+                    <div class="form-group"><input type="number" id="productPrice" placeholder="السعر (ريال يمني)" step="100"></div>
+                    <div class="form-group">
+                        <select id="productCategory">
+                            <option value="بقوليات">بقوليات وحبوب</option><option value="حلويات">حلويات</option>
+                            <option value="غازية">مشروبات غازية</option><option value="عصيرات">عصيرات</option>
+                            <option value="مياه">مياه معدنية</option><option value="بهارات">بهارات</option>
+                            <option value="ألبان">ألبان وحليب</option><option value="زيوت">سمن وزيوت</option>
+                            <option value="يمني">منتجات يمنية 🇾🇪</option>
+                        </select>
+                    </div>
+                    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                        <button class="btn" id="addProductBtn" style="flex:1;"><i class="fas fa-plus"></i> إضافة منتج</button>
+                        <button class="btn btn-warning" id="resetDatabaseBtn" style="flex:1;"><i class="fas fa-database"></i> إعادة ضبط</button>
+                    </div>
+                    <hr style="margin:24px 0;border-color:var(--border-color);">
+                    <h4><i class="fas fa-list"></i> المنتجات الحالية</h4>
+                    <div id="adminProductList" style="max-height:350px;overflow-y:auto;"></div>
+                </div>
+                
+                <div class="admin-subsection" id="offersManage" style="display:none;">
+                    <div class="form-group"><label><i class="fas fa-box"></i> اختر المنتج</label><select id="offerProductSelect"><option value="">-- اختر منتج --</option></select></div>
+                    <div class="form-group"><label><i class="fas fa-percent"></i> نسبة الخصم (%)</label><input type="number" id="offerDiscountPercent" placeholder="مثال: 20" min="1" max="99"></div>
+                    <div class="form-row">
+                        <div class="form-group"><label><i class="fas fa-calendar"></i> تاريخ البداية</label><input type="date" id="offerStartDate"></div>
+                        <div class="form-group"><label><i class="fas fa-calendar-check"></i> تاريخ النهاية</label><input type="date" id="offerEndDate"></div>
+                    </div>
+                    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                        <button class="btn btn-success" id="addOfferBtn" style="flex:1;"><i class="fas fa-plus-circle"></i> إضافة العرض</button>
+                        <button class="btn btn-warning" id="clearExpiredOffersBtn" style="flex:1;"><i class="fas fa-trash-alt"></i> حذف المنتهية</button>
+                    </div>
+                    <hr style="margin:24px 0;border-color:var(--border-color);">
+                    <h4><i class="fas fa-list"></i> العروض الحالية</h4>
+                    <div id="adminOffersList" style="max-height:350px;overflow-y:auto;"></div>
+                </div>
+                
+                <div class="admin-subsection" id="usersManage" style="display:none;">
+                    <h4><i class="fas fa-users"></i> المستخدمون المسجلون</h4>
+                    <div id="registeredUsersList" style="max-height:400px;overflow-y:auto;"></div>
+                </div>
+                
+                <div class="admin-subsection" id="exportData" style="display:none;">
+                    <div style="text-align:center;padding:20px;">
+                        <i class="fas fa-download" style="font-size:4rem;color:var(--accent);margin-bottom:16px;"></i>
+                        <h4>تصدير جميع البيانات</h4>
+                        <p style="color:var(--text-muted);">تصدير المنتجات، العروض، والمستخدمين</p>
+                        <button class="btn" id="exportAllDataBtn"><i class="fas fa-file-export"></i> تصدير JSON</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- زر واتساب -->
+<div class="floating-whatsapp">
+    <a href="https://wa.me/967775647152" target="_blank" class="whatsapp-float-btn">
+        <img src="WhatsApp.png" alt="واتساب" class="whatsapp-local-icon" onerror="this.innerHTML='<i class=\'fab fa-whatsapp\'></i>';">
+    </a>
+</div>
+
+<!-- شريط التنقل -->
+<div class="bottom-nav">
+    <div class="nav-item active" data-page="homePage">
+        <img src="Home.png" alt="الرئيسية" onerror="this.innerHTML='<i class=\'fas fa-home\'></i>';">
+        <span>الرئيسية</span>
+    </div>
+    <div class="nav-item" data-page="productsPage">
+        <img src="Products.png" alt="المنتجات" onerror="this.innerHTML='<i class=\'fas fa-box\'></i>';">
+        <span>المنتجات</span>
+    </div>
+    <div class="nav-item" data-page="offersPage">
+        <img src="Offers.png" alt="العروض" onerror="this.innerHTML='<i class=\'fas fa-percent\'></i>';">
+        <span>العروض</span>
+    </div>
+    <div class="nav-item" data-page="cartPage">
+        <img src="Basket.png" alt="السلة" onerror="this.innerHTML='<i class=\'fas fa-shopping-bag\'></i>';">
+        <span>السلة</span>
+    </div>
+    <div class="nav-item" data-page="profilePage">
+        <img src="My account.png" alt="حسابي" onerror="this.innerHTML='<i class=\'fas fa-user\'></i>';">
+        <span>حسابي</span>
+    </div>
+</div>
+
+<div id="toastContainer"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
